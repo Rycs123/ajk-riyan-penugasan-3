@@ -152,7 +152,7 @@ jobs:
             docker run -d --name tamiyochi-laravel \
               -p 80:80 \
               -e DB_HOST=host.docker.internal \
-              -e DB_DATABASE=cicd \
+              -e DB_DATABASE=laravel \
               -e DB_USERNAME=root \
-              -e DB_PASSWORD= \
+              -e DB_PASSWORD=root\
               ${{ secrets.DOCKER_USERNAME }}/tamiyochi-laravel:latest
