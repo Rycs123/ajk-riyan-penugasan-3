@@ -21,7 +21,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/ajk-cicd:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/tamiyochi-laravel:latest
 
   deploy:
     runs-on: ubuntu-latest
