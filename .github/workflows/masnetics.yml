@@ -5,8 +5,23 @@ on:
     branches: ['master']
 
 jobs:
+  check-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if Docker is installed
+        run: |
+          if ! command -v docker &> /dev/null
+          then
+              echo "Docker is not installed."
+              exit 1
+          else
+              echo "Docker is installed."
+              docker --version
+          fi
+
   build:
     runs-on: ubuntu-latest
+    needs: check-docker
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
