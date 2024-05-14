@@ -3,7 +3,7 @@ name: Build and Deploy Laravel Application
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build:
