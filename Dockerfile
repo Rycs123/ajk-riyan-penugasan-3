@@ -37,8 +37,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY . /var/www
 
-COPY --from=build-frontend /resources/css /var/www/public/js
-COPY --from=build-frontend /resources/js /var/www/public/css
+COPY --from=build-frontend /app/public/js /var/www/public/js
+COPY --from=build-frontend /app/public/css /var/www/public/css
 
 RUN chown -R www-data:www-data \
     /var/www/storage \
