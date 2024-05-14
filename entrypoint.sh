@@ -10,5 +10,5 @@ php artisan db:seed
 # Ensure storage is linked
 php artisan storage:link
 
-# Start PHP-FPM
-php-fpm
+# Start Supervisor
+exec supervisord -c /etc/supervisor/conf.d/supervisord.conf
