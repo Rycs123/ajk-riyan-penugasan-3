@@ -51,7 +51,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << 'EOF'
+          ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << EOF
             sudo usermod -aG docker $USERNAME
             newgrp docker << EONG
               docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
