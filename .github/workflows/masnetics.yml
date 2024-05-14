@@ -51,10 +51,13 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << EOF
-            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-            docker pull $DOCKER_USERNAME/my-laravel-app:latest
-            docker stop my-laravel-app || true
-            docker rm my-laravel-app || true
-            docker run -d -p 80:80 --name my-laravel-app $DOCKER_USERNAME/my-laravel-app:latest
+          ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << 'EOF'
+            sudo usermod -aG docker $USERNAME
+            newgrp docker << EONG
+              docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+              docker pull $DOCKER_USERNAME/my-laravel-app:latest
+              docker stop my-laravel-app || true
+              docker rm my-laravel-app || true
+              docker run -d -p 80:80 --name my-laravel-app $DOCKER_USERNAME/my-laravel-app:latest
+            EONG
           EOF
