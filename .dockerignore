@@ -1,6 +1,8 @@
-Dockerfile
-*.md
-.git*
-cicd.sh
-.env.example
-composer.lock
+node_modules
+npm-debug.log
+Dockerfile*
+docker-compose.yml
+.dockerignore
+.git
+.gitignore
+.env

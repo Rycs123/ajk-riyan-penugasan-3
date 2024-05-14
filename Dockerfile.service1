@@ -24,7 +24,8 @@ COPY . .
 
 RUN cp .env.example .env
 
-RUN composer install
+RUN composer install --no-interaction --optimize-autoloader --no-dev
+
 
 RUN php artisan key:generate \
     && php artisan migrate \
