@@ -1,0 +1,44 @@
+FROM php:8.1-fpm
+
+WORKDIR /var/www/fullstack
+
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    zip \
+    unzip \
+    git \
+    curl \
+    libonig-dev \
+    libxml2-dev
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+COPY . .
+
+RUN composer install
+
+RUN cp .env.example .env
+
+RUN php artisan key:generate
+
+RUN php artisan migrate
+
+RUN php artisan db:seed
+
+RUN php artisan storage:link
+
+RUN chown -R www-data:www-data \
+    /var/www/storage \
+    /var/www/bootstrap/cache
+
+EXPOSE 9000
+
+# CMD [ "php", "artisan", "serve"]
+
+CMD [ "php-fpm" ]
