@@ -1,4 +1,4 @@
-FROM node:20 AS build-frontend
+FROM node:latest AS build-frontend
 
 WORKDIR /app
 
@@ -11,6 +11,8 @@ COPY . .
 RUN yarn build
 
 RUN ls -alh /app/public/build
+
+RUN ls -alh /app/public/build/assets
 
 FROM php:8.1-fpm
 
@@ -39,7 +41,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY . /var/www
 
-COPY --from=build-frontend /app/public/build /var/www/public/build
+COPY --from=build-frontend /app/public/build/assets /var/www/public/build/assets
 
 RUN chown -R www-data:www-data \
     /var/www/storage \
