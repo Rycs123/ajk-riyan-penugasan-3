@@ -8,8 +8,6 @@ RUN npm install
 
 COPY . .
 
-RUN npm run dev
-
 RUN npm run build
 
 FROM php:8.1-fpm
