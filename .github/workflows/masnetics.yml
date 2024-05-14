@@ -34,30 +34,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install SSH client
-        run: sudo apt-get install -y openssh-client
-
-      - name: Add SSH key
-        env:
-          SSHKEY: ${{ secrets.SSHKEY }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSHKEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-      - name: Deploy to Azure VM
-        env:
-          HOST: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          ssh -o StrictHostKeyChecking=no $USERNAME@$HOST << EOF
-            sudo usermod -aG docker $USERNAME
-            newgrp docker << EONG
-              docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-              docker pull $DOCKER_USERNAME/my-laravel-app:latest
-              docker stop my-laravel-app || true
-              docker rm my-laravel-app || true
-              docker run -d -p 80:80 --name my-laravel-app $DOCKER_USERNAME/my-laravel-app:latest
-            EONG
-          EOF
+      - name: SSH to server and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSHKEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/my-laravel-app:latest
+            docker container rm -f my-laravel-app || true
+            docker run -d --name my-laravel-app -p 80:80 ${{ secrets.DOCKER_USERNAME }}/my-laravel-app:latest && docker exec my-laravel-app nginx
