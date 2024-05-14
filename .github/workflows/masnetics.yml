@@ -63,4 +63,4 @@ jobs:
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/my-laravel-app:latest
             docker container rm -f my-laravel-app || true
-            docker run -d --name my-laravel-app -p 80:80 ${{ secrets.DOCKER_USERNAME }}/my-laravel-app:latest && docker exec my-laravel-app nginx
+            docker run -d --name my-laravel-app -p 80:80 ${{ secrets.DOCKER_USERNAME }}/my-laravel-app:latest
