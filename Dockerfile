@@ -4,11 +4,11 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN yarn
 
 COPY . .
 
-RUN npm run build
+RUN yarn build
 
 FROM php:8.1-fpm
 
