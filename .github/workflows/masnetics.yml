@@ -50,6 +50,6 @@ jobs:
           # port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/ajk-cicd:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/tamiyochi-laravel:latest
             docker container rm -f githubituproblematik || true
             docker run -d --name githubituproblematik -p 80:80 ${{ secrets.DOCKER_USERNAME }}/ajk-cicd:latest && docker exec githubituproblematik nginx
