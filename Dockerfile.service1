@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.1-cli
 
 WORKDIR /var/www/fullstack
 
@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
+    supervisor \
     unzip \
     git \
     curl \
@@ -37,7 +38,6 @@ RUN chown -R www-data:www-data \
 
 EXPOSE 9000
 
-# CMD [ "php-fpm" ]
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
