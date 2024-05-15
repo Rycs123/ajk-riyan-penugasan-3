@@ -72,10 +72,6 @@ jobs:
   #           docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
   #           docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
   #           docker pull ${{ secrets.DOCKER_USERNAME }}/nginx:latest
-  # docker pull rycs123/mysql:latest
-  # docker pull rycs123/backend:latest
-  # docker pull rycs123/frontend:latest
-  # docker pull rycs123/nginx:latest
 
   #           # Stop and remove existing containers
   #           docker stop frontend || true && docker rm frontend || true
@@ -85,7 +81,12 @@ jobs:
 
   #           docker network create laravel || true
 
-  #           docker run -d --name mysql --network laravel -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel rycs123/mysql
-  #           docker run -d --name backend --network laravel rycs123/backend
-  #           docker run -d --name frontend --network laravel rycs123/frontend
-  #           docker run -d --name nginx --network laravel -p 80:80 rycs123/nginx
+  #           docker run -d --name mysql --network laravel -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel ${{ secrets.DOCKER_USERNAME }}/mysql
+  #           docker run -d --name backend --network laravel ${{ secrets.DOCKER_USERNAME }}/backend && docker exec backend php artisan key:generate && docker exec backend php artisan migrate --force && docker exec backend php artisan db:seed --force &&  docker exec backend php artisan storage:link && docker exec backend php artisan serve
+  #           docker run -d --name frontend --network laravel ${{ secrets.DOCKER_USERNAME }}/frontend
+  #           docker run -d --name nginx --network laravel -p 80:80 ${{ secrets.DOCKER_USERNAME }}/nginx
+
+  # docker pull rycs123/mysql:latest
+  # docker pull rycs123/backend:latest
+  # docker pull rycs123/frontend:latest
+  # docker pull rycs123/nginx:latest
