@@ -1,18 +1,14 @@
 version: '3.8'
 
 services:
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.service2
-    container_name: frontend
-    depends_on:
-      - backend
-    ports:
-      - '3000:3000'
-    restart: always
+  db:
+    image: mysql:latest
+    container_name: db
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
     volumes:
-      - .:/var/www/fullstack
+      - dbdata:/var/lib/mysql
     networks:
       - laravel
 
@@ -39,14 +35,18 @@ services:
 
     entrypoint: ['/var/www/fullstack/entrypoint.sh']
 
-  db:
-    image: mysql:latest
-    container_name: db
-    environment:
-      - MYSQL_DATABASE=${DB_DATABASE}
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.service2
+    container_name: frontend
+    depends_on:
+      - backend
+    ports:
+      - '3000:3000'
+    restart: always
     volumes:
-      - dbdata:/var/lib/mysql
+      - .:/var/www/fullstack
     networks:
       - laravel
 
