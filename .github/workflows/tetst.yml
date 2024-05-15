@@ -56,32 +56,32 @@ jobs:
           file: Dockerfile.nginx
           tags: ${{ secrets.DOCKER_USERNAME }}/nginx:latest
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build
 
-    steps:
-      - name: deploy to server via ssh
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSHKEY }}
-          script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
-            docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
-            docker pull ${{ secrets.DOCKER_USERNAME }}/nginx:latest
-            docker pull ${{ secrets.DOCKER_USERNAME }}/mysql:latest
+  #   steps:
+  #     - name: deploy to server via ssh
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.HOST }}
+  #         username: ${{ secrets.USERNAME }}
+  #         key: ${{ secrets.SSHKEY }}
+  #         script: |
+  #           docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+  #           docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
+  #           docker pull ${{ secrets.DOCKER_USERNAME }}/nginx:latest
+  #           docker pull ${{ secrets.DOCKER_USERNAME }}/mysql:latest
 
-            # Stop and remove existing containers
-            docker stop frontend || true && docker rm frontend || true
-            docker stop backend || true && docker rm backend || true
-            docker stop nginx || true && docker rm nginx || true
-            docker stop mysql || true && docker rm mysql || true
+  #           # Stop and remove existing containers
+  #           docker stop frontend || true && docker rm frontend || true
+  #           docker stop backend || true && docker rm backend || true
+  #           docker stop nginx || true && docker rm nginx || true
+  #           docker stop mysql || true && docker rm mysql || true
 
-            docker network create laravel || true
+  #           docker network create laravel || true
 
-            docker run -d --name mysql --network laravel -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel rycs123/mysql
-            docker run -d --name backend --network laravel rycs123/backend
-            docker run -d --name frontend --network laravel rycs123/frontend
-            docker run -d --name nginx --network laravel -p 80:80 rycs123/nginx
+  #           docker run -d --name mysql --network laravel -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel rycs123/mysql
+  #           docker run -d --name backend --network laravel rycs123/backend
+  #           docker run -d --name frontend --network laravel rycs123/frontend
+  #           docker run -d --name nginx --network laravel -p 80:80 rycs123/nginx
