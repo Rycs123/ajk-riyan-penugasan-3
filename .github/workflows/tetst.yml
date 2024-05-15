@@ -30,7 +30,7 @@ jobs:
           context: .
           push: true
           no-cache: true
-          tags: ${{ secrets.DB_HOST }}/my-laravel-app:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/my-laravel-app:latest
           build-args: |
             DB_HOST=${{  secrets.DB_HOST }}
 
