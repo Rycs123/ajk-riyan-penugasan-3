@@ -1,6 +1,6 @@
 FROM node:latest AS build-frontend
 
-WORKDIR /var/www/fullstack
+WORKDIR /app
 
 COPY package*.json yarn.lock ./
 
