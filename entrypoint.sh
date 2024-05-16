@@ -13,10 +13,13 @@ done
 echo "MySQL is ready..."
 
 php artisan migrate
+echo "php artisan migrate done"
 
 php artisan db:seed
+echo "php artisan db:seed done"
 
 php artisan storage:link
+echo "php artisan sl done"
 
 php artisan serve
 
