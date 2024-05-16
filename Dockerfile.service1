@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY /nginx/default.conf /etc/nginx/nginx.conf
+COPY nginx/default.conf /etc/nginx/nginx.conf
 
 RUN docker-php-ext-install gd pdo pdo_mysql exif pcntl bcmath
 
@@ -35,7 +35,6 @@ RUN chown -R www-data:www-data \
 
 EXPOSE 8080
 
-CMD ["php-fpm"]
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

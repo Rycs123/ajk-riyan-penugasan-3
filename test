@@ -20,6 +20,8 @@
                 "MacAddress": "02:42:ac:12:00:02",
                 "IPv4Address": "172.18.0.2/16",
                 "IPv6Address": ""
+                curl http://172.18.0.3:8080
+                curl http://172.18.0.4:3001
             },
             "bd66a21f5024b02f9d57803714650fc8203372e0c404f1c4fa7b73c0e8ff03ec": {
                 "Name": "frontend",
