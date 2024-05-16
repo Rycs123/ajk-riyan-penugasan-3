@@ -8,8 +8,9 @@ php artisan key:generate
 
 echo "Waiting for MySQL to be ready..."
 until mysql -h mysql -u root -proot -e "SHOW DATABASES;" > /dev/null 2>&1; do
-    sleep 10
+    sleep 3
 done
+echo "MySQL is ready..."
 
 php artisan migrate
 
