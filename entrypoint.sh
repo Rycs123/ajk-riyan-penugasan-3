@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# Run migrations
+php artisan key:generate
+
 php artisan migrate
+
+php artisan db:seed
+
+php artisan storage:link
 
 # Start PHP-FPM
 php-fpm
