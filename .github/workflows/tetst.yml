@@ -68,23 +68,23 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/mysql:latest
-            docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
-            docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
-            docker pull ${{ secrets.DOCKER_USERNAME }}/nginx:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/mysql:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nginx:latest
 
             # Stop and remove existing containers
-            docker stop frontend || true && docker rm frontend || true
-            docker stop backend || true && docker rm backend || true
-            docker stop nginx || true && docker rm nginx || true
-            docker stop mysql || true && docker rm mysql || true
+            sudo docker stop frontend || true && docker rm frontend || true
+            sudo docker stop backend || true && docker rm backend || true
+            sudo docker stop nginx || true && docker rm nginx || true
+            sudo docker stop mysql || true && docker rm mysql || true
 
-            docker network create laravel || true
+            sudo docker network create laravel || true
 
-            docker run -d --name mysql --network laravel -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel ${{ secrets.DOCKER_USERNAME }}/mysql
-            docker run -d --name backend --network laravel ${{ secrets.DOCKER_USERNAME }}/backend && docker exec backend php artisan key:generate && docker exec backend php artisan migrate --force && docker exec backend php artisan db:seed --force &&  docker exec backend php artisan storage:link && docker exec backend php artisan serve
-            docker run -d --name frontend --network laravel ${{ secrets.DOCKER_USERNAME }}/frontend
-            docker run -d --name nginx --network laravel -p 80:80 ${{ secrets.DOCKER_USERNAME }}/nginx
+            sudo docker run -d --name mysql --network laravel -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel ${{ secrets.DOCKER_USERNAME }}/mysql
+            sudo docker run -d --name backend --network laravel ${{ secrets.DOCKER_USERNAME }}/backend && docker exec backend php artisan key:generate && docker exec backend php artisan migrate --force && docker exec backend php artisan db:seed --force &&  docker exec backend php artisan storage:link && docker exec backend php artisan serve
+            sudo docker run -d --name frontend --network laravel ${{ secrets.DOCKER_USERNAME }}/frontend
+            sudo docker run -d --name nginx --network laravel -p 80:80 ${{ secrets.DOCKER_USERNAME }}/nginx
 
   # docker pull rycs123/mysql:latest && docker pull rycs123/backend:latest && docker pull rycs123/frontend:latest && docker pull rycs123/nginx:latest
 
