@@ -26,7 +26,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . .
 
 # Set up permissions
-RUN  chmod -R 775 . && sudo chown -R www-data:www-data .
+RUN  chmod -R 775 . && chown -R www-data:www-data .
 
 COPY nginx/default.conf /etc/nginx/sites-available/default
 
