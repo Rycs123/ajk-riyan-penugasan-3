@@ -24,7 +24,7 @@ echo "php artisan db:seed done"
 php artisan storage:link
 echo "php artisan sl done"
 
-php artisan serve
+php artisan serve --host
 
 php-fpm
 nginx -g 'daemon off;'
