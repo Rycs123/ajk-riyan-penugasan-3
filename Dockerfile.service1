@@ -1,6 +1,7 @@
 FROM php:8.2-fpm
 
 WORKDIR /var/www/fullstack
+RUN a2enmod rewrite
 
 RUN apt-get update && apt-get install -y \
     libpng-dev \
@@ -32,26 +33,10 @@ RUN cp .env.example .env
 
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-RUN php artisan key:generate
-
-# Comment out migrate and seed commands
-# RUN php artisan migrate
-# RUN php artisan db:seed
-
-RUN php artisan route:clear
-RUN php artisan config:clear
-RUN php artisan cache:clear
-RUN php artisan storage:link
-RUN php artisan key:generate
-
 RUN chown -R www-data:www-data \
     /var/www/fullstack/storage \
     /var/www/fullstack/bootstrap/cache
 
 EXPOSE 9000
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm"]
