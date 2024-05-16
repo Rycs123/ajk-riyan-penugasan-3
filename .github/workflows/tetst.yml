@@ -74,10 +74,10 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nginx:latest
 
             # Stop and remove existing containers
-            sudo docker stop frontend || true && docker rm frontend || true
-            sudo docker stop backend || true && docker rm backend || true
-            sudo docker stop nginx || true && docker rm nginx || true
-            sudo docker stop mysql || true && docker rm mysql || true
+            sudo docker stop frontend || true && sudo docker rm frontend || true
+            sudo docker stop backend || true && sudo docker rm backend || true
+            sudo docker stop nginx || true && sudo docker rm nginx || true
+            sudo docker stop mysql || true && sudo docker rm mysql || true
 
             sudo docker network create laravel || true
 
