@@ -8,5 +8,6 @@ php artisan db:seed
 
 php artisan storage:link
 
-# Start PHP-FPM
+php artisan serve --host=0.0.0.0 --port=9000
+
 php-fpm
