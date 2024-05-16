@@ -2,6 +2,7 @@ FROM php:8.2-fpm
 
 WORKDIR /var/www/fullstack
 RUN a2enmod rewrite
+RUN a2enmod rewrite
 
 RUN apt-get update && apt-get install -y \
     libpng-dev \
@@ -26,16 +27,20 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY . .
 
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+# Set up permissions
+RUN groupadd -g 1000 www && \
+    useradd -u 1000 -ms /bin/bash -g www www && \
+    chown -R www-data:www-data \
+    /var/www/fullstack/storage \
+    /var/www/fullstack/bootstrap/cache
+
+COPY nginx/default.conf /etc/nginx/sites-available/default
+
+RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 RUN cp .env.example .env
 
 RUN composer install --no-interaction --optimize-autoloader --no-dev
-
-RUN chown -R www-data:www-data \
-    /var/www/fullstack/storage \
-    /var/www/fullstack/bootstrap/cache
 
 EXPOSE 9000
 
