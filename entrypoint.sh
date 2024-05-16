@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /var/www/fullstack
+
 php artisan cache:clear
 php artisan route:clear
 php artisan config:clear
@@ -24,3 +26,4 @@ echo "php artisan sl done"
 php artisan serve
 
 php-fpm
+nginx -g 'daemon off;'
