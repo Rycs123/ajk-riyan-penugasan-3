@@ -26,17 +26,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . .
 
 # Set up permissions
-RUN groupadd -g 1000 www && \
-    useradd -u 1000 -ms /bin/bash -g www www && \
-    chown -R www-data:www-data \
-    /var/www/fullstack/storage \
-    /var/www/fullstack/storage/logs \
-    /var/www/fullstack/bootstrap/cache
+RUN  chmod -R 775 . && sudo chown -R www-data:www-data .
 
 COPY nginx/default.conf /etc/nginx/sites-available/default
-
-RUN rm -f /etc/nginx/sites-enabled/default && \
-    ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 RUN cp .env.example .env
 
