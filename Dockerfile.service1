@@ -28,8 +28,6 @@ COPY . .
 # Set up permissions
 RUN  chmod -R 775 . && chown -R www-data:www-data .
 
-COPY nginx/default.conf /etc/nginx/sites-available/default
-
 RUN cp .env.example .env
 
 RUN composer install --no-interaction --optimize-autoloader --no-dev
