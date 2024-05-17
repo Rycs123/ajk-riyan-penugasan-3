@@ -19,21 +19,25 @@ RUN docker-php-ext-install gd pdo pdo_mysql exif pcntl bcmath mbstring zip opcac
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY . .
+RUN composer install --optimize-autoloader --no-dev
 
-# Set up permissions
-RUN  chmod -R 775 . && chown -R www-data:www-data .
+COPY . .
 
 RUN cp .env.example .env
 
-RUN composer install --optimize-autoloader --no-dev
+RUN php artisan key:generate
+
+RUN php artisan migrate:reset
+RUN php artisan migrate
+RUN php artisan db:seed
 
 RUN php artisan config:clear
-RUN php artisan key:generate
 RUN php artisan config:cache
 RUN php artisan view:cache
 RUN php artisan storage:link
 
-EXPOSE 9000
+RUN  chmod -R 775 . && chown -R www-data:www-data .
+RUN chmod -R 775 /storage/logs
 
+EXPOSE 9000
 CMD ["php-fpm"]

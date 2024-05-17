@@ -24,66 +24,66 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # - name: Build and push mysql image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     push: true
-      #     file: Dockerfile.mysql
-      #     tags: ${{ secrets.DOCKER_USERNAME }}/mysql:latest
+      - name: Build and push mysql image
+        uses: docker/build-push-action@v5
+        with:
+          context: Docker/
+          push: true
+          file: Dockerfile.mysql
+          tags: ${{ secrets.DOCKER_USERNAME }}/mysql:latest
 
-      # - name: Build and push backend image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     push: true
-      #     file: Dockerfile.service1
-      #     tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: Docker/
+          push: true
+          file: Dockerfile.service1
+          tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
 
-      # - name: Build and push frontend image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     push: true
-      #     file: Dockerfile.service2
-      #     tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: Docker/
+          push: true
+          file: Dockerfile.service2
+          tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
 
       - name: Build and push nginx image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: Docker/
           push: true
           file: Dockerfile.nginx
           tags: ${{ secrets.DOCKER_USERNAME }}/nginx:latest
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build
 
-    steps:
-      - name: deploy to server via ssh
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSHKEY }}
-          script: |
-            # sudo docker pull ${{ secrets.DOCKER_USERNAME }}/mysql:latest
-            # sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
-            # sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nginx:latest
+  #   steps:
+  #     - name: deploy to server via ssh
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.HOST }}
+  #         username: ${{ secrets.USERNAME }}
+  #         key: ${{ secrets.SSHKEY }}
+  #         script: |
+  # sudo docker pull ${{ secrets.DOCKER_USERNAME }}/mysql:latest
+  # sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
+  # sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+  # sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nginx:latest
 
-            # Stop and remove existing containers
-            # sudo docker stop mysql || true && sudo docker rm mysql || true
-            # sudo docker stop backend || true && sudo docker rm backend || true
-            # sudo docker stop frontend || true && sudo docker rm frontend || true
-            sudo docker stop nginx || true && sudo docker rm nginx || true
+  # Stop and remove existing containers
+  # sudo docker stop mysql || true && sudo docker rm mysql || true
+  # sudo docker stop backend || true && sudo docker rm backend || true
+  # sudo docker stop frontend || true && sudo docker rm frontend || true
+  # sudo docker stop nginx || true && sudo docker rm nginx || true
 
-            # sudo docker network create laravel || true
+  # sudo docker network create laravel || true
 
-            # sudo docker run -d --name mysql -h mysql --network laravel -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel -p 3306:3306 ${{ secrets.DOCKER_USERNAME }}/mysql
-            # sudo docker run -d --name backend -h backend --network laravel -p 9000:9000 ${{ secrets.DOCKER_USERNAME }}/backend
-            # sudo docker exec backend bash -c "php artisan migrate"
-            # sudo docker exec backend bash -c "php artisan db:seed"
-            # sudo docker run -d --name frontend -h frontend --network laravel -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/frontend
-            sudo docker run -d --name nginx -h nginx --network laravel -p 80:80 ${{ secrets.DOCKER_USERNAME }}/nginx
+  # sudo docker run -d --name mysql -h mysql --network laravel -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel -p 3306:3306 ${{ secrets.DOCKER_USERNAME }}/mysql
+  # sudo docker run -d --name backend -h backend --network laravel -p 9000:9000 ${{ secrets.DOCKER_USERNAME }}/backend
+  # sudo docker exec backend bash -c "php artisan migrate"
+  # sudo docker exec backend bash -c "php artisan db:seed"
+  # sudo docker run -d --name frontend -h frontend --network laravel -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/frontend
+  # sudo docker run -d --name nginx -h nginx --network laravel -p 80:80 ${{ secrets.DOCKER_USERNAME }}/nginx
