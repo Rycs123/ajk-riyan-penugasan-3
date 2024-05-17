@@ -85,5 +85,5 @@ jobs:
             sudo docker run -d --name backend -h backend --network newNetwork -p 9000:9000 ${{ secrets.DOCKER_USERNAME }}/backend
             sudo docker run -d --name frontend -h frontend --network newNetwork -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/frontend
             sudo docker run -d --name nginx -h nginx --network newNetwork -p 80:80 ${{ secrets.DOCKER_USERNAME }}/nginx
-            sudo docker exec backend bash -c "php artisan migrate"
-            sudo docker exec backend bash -c "php artisan db:seed"
+            sudo docker exec backend php artisan migrate
+            sudo docker exec backend php artisan db:seed
