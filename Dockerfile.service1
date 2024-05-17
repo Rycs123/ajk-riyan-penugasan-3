@@ -26,6 +26,10 @@ RUN composer install --optimize-autoloader --no-dev
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
+RUN npm install
+
+RUN npm run build
+
 RUN cp .env.example .env
 
 RUN php artisan key:generate
@@ -42,7 +46,7 @@ RUN php artisan storage:link
 
 RUN mkdir -p /var/www/fullstack/storage/logs
 RUN chmod -R 775 . && chown -R www-data:www-data .
-RUN chmod -R 777 /var/www/fullstack/storage/logs
+RUN chmod -R 775 /var/www/fullstack/storage/logs & chown -R www-data:www-data /var/www/fullstack/storage/logs
 
 EXPOSE 9000
-CMD ["php-fpm"]
+CMD ["sh", "-c", "php-fpm & php artisan migrate --force && php artisan db:seed --force && fg"]
