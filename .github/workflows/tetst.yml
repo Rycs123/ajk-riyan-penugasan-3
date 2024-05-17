@@ -81,7 +81,7 @@ jobs:
 
             # sudo docker network create laravel || true
 
-            # sudo docker run -d --name mysql -h mysql --network laravel -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel -p 3306:3306 ${{ secrets.DOCKER_USERNAME }}/mysql
+            sudo docker run -d --name mysql -h mysql --network laravel -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel -p 3306:3306 ${{ secrets.DOCKER_USERNAME }}/mysql
             sudo docker run -d --name backend -h backend --network laravel -p 9000:9000 ${{ secrets.DOCKER_USERNAME }}/backend
             sudo docker exec backend bash -c "php artisan migrate"
             sudo docker exec backend bash -c "php artisan db:seed"
