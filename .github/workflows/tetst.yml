@@ -27,7 +27,7 @@ jobs:
       - name: Build and push mysql image
         uses: docker/build-push-action@v5
         with:
-          context: Docker/
+          context: Docker/.
           push: true
           file: Dockerfile.mysql
           tags: ${{ secrets.DOCKER_USERNAME }}/mysql:latest
@@ -35,7 +35,7 @@ jobs:
       - name: Build and push backend image
         uses: docker/build-push-action@v5
         with:
-          context: Docker/
+          context: Docker/.
           push: true
           file: Dockerfile.service1
           tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
@@ -43,7 +43,7 @@ jobs:
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
-          context: Docker/
+          context: Docker/.
           push: true
           file: Dockerfile.service2
           tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
@@ -51,7 +51,7 @@ jobs:
       - name: Build and push nginx image
         uses: docker/build-push-action@v5
         with:
-          context: Docker/
+          context: Docker/.
           push: true
           file: Dockerfile.nginx
           tags: ${{ secrets.DOCKER_USERNAME }}/nginx:latest
