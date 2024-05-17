@@ -83,14 +83,16 @@ jobs:
 
             sudo docker run -d --name mysql -h mysql --network newNetwork -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel -p 3306:3306 ${{ secrets.DOCKER_USERNAME }}/mysql
             for i in {1..30}; do
-              if sudo docker exec mysql mysqladmin ping -h"localhost" --silent; then
+              if sudo docker exec mysql mysqladmin ping -h "localhost" --silent; then
                 echo "MySQL is up and running"
                 break
               fi
               echo "Waiting for MySQL to be ready..."
               sleep 2
             done
+            sudo docker logs mysql
             sudo docker run -d --name backend -h backend --network newNetwork -e DB_HOST=${{ secrets.DB_HOST }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e DB_DATABASE=${{ secrets.DB_DATABASE }} -p 9000:9000 ${{ secrets.DOCKER_USERNAME }}/backend
+            sudo docker logs backend
             sudo docker exec backend php artisan migrate
             # sudo docker run -d --name frontend -h frontend --network newNetwork -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/frontend
             # sudo docker run -d --name nginx -h nginx --network newNetwork -p 80:80 ${{ secrets.DOCKER_USERNAME }}/nginx
