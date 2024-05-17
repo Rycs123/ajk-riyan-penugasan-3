@@ -82,6 +82,8 @@ jobs:
             # sudo docker network create laravel || true
 
             # sudo docker run -d --name mysql -h mysql --network laravel -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel -p 3306:3306 ${{ secrets.DOCKER_USERNAME }}/mysql
-            sudo docker run -d --name backend -h backend --network laravel -p 9000:9000 ${{ secrets.DOCKER_USERNAME }}/backend && sudo docker exec backend bash php artisan migrate && sudo docker exec backend bash php artisan db:seed
+            sudo docker run -d --name backend -h backend --network laravel -p 9000:9000 ${{ secrets.DOCKER_USERNAME }}/backend
+            sudo docker exec backend bash -c "php artisan migrate"
+            sudo docker exec backend bash -c "php artisan db:seed"
             # sudo docker run -d --name frontend -h frontend --network laravel -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/frontend
             # sudo docker run -d --name nginx -h nginx --network laravel -p 80:80 ${{ secrets.DOCKER_USERNAME }}/nginx
