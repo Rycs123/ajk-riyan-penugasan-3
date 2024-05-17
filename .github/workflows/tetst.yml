@@ -8,57 +8,57 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  # build:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+  #     - name: Log in to Docker Hub
+  #       uses: docker/login-action@v3
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push mysql image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          file: Dockerfile.mysql
-          tags: ${{ secrets.DOCKER_USERNAME }}/mysql:latest
+  #     - name: Build and push mysql image
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: .
+  #         push: true
+  #         file: Dockerfile.mysql
+  #         tags: ${{ secrets.DOCKER_USERNAME }}/mysql:latest
 
-      - name: Build and push backend image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          file: Dockerfile.service1
-          tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
+  #     - name: Build and push backend image
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: .
+  #         push: true
+  #         file: Dockerfile.service1
+  #         tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
 
-      - name: Build and push frontend image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          file: Dockerfile.service2
-          tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+  #     - name: Build and push frontend image
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: .
+  #         push: true
+  #         file: Dockerfile.service2
+  #         tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
 
-      - name: Build and push nginx image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          file: Dockerfile.nginx
-          tags: ${{ secrets.DOCKER_USERNAME }}/nginx:latest
+  #     - name: Build and push nginx image
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: .
+  #         push: true
+  #         file: Dockerfile.nginx
+  #         tags: ${{ secrets.DOCKER_USERNAME }}/nginx:latest
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    # needs: build
 
     steps:
       - name: deploy to server via ssh
@@ -70,18 +70,20 @@ jobs:
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/mysql:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend:latest
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nginx:latest
+            # sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+            # sudo docker pull ${{ secrets.DOCKER_USERNAME }}/nginx:latest
 
             # Stop and remove existing containers
             sudo docker stop mysql || true && sudo docker rm mysql || true
             sudo docker stop backend || true && sudo docker rm backend || true
-            sudo docker stop frontend || true && sudo docker rm frontend || true
-            sudo docker stop nginx || true && sudo docker rm nginx || true
+            # sudo docker stop frontend || true && sudo docker rm frontend || true
+            # sudo docker stop nginx || true && sudo docker rm nginx || true
 
             sudo docker network create newNetwork || true
 
             sudo docker run -d --name mysql -h mysql --network newNetwork -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laravel -p 3306:3306 ${{ secrets.DOCKER_USERNAME }}/mysql
-            sudo docker run -d --name backend -h backend --network newNetwork -e DB_HOST=mysql -e DB_USERNAME=root -e DB_PASSWORD=root -e DB_DATABASE=laravel -p 9000:9000 ${{ secrets.DOCKER_USERNAME }}/backend
-            sudo docker run -d --name frontend -h frontend --network newNetwork -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/frontend
-            sudo docker run -d --name nginx -h nginx --network newNetwork -p 80:80 ${{ secrets.DOCKER_USERNAME }}/nginx
+            sudo docker run -d --name backend -h backend --network newNetwork -e DB_HOST=${{ secrets.DB_HOST }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e DB_DATABASE=${{ secrets.DB_DATABASE }} -p 9000:9000 ${{ secrets.DOCKER_USERNAME }}/backend
+            docker exec backend php artisan migrate
+            docker exec backend php artisan db:seed
+            # sudo docker run -d --name frontend -h frontend --network newNetwork -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/frontend
+            # sudo docker run -d --name nginx -h nginx --network newNetwork -p 80:80 ${{ secrets.DOCKER_USERNAME }}/nginx
