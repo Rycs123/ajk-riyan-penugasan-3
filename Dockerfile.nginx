@@ -2,7 +2,7 @@ FROM nginx:latest
 
 COPY /nginx/default.conf /etc/nginx/nginx.conf
 
-COPY fullstack /var/www/fullstack
+COPY . /var/www/fullstack
 
 EXPOSE 80/tcp
 
