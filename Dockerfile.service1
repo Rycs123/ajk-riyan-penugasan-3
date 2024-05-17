@@ -23,8 +23,8 @@ COPY . .
 
 RUN composer install --optimize-autoloader --no-dev
 
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash - \
-    && nvm install 20
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
 RUN cp .env.example .env
 
