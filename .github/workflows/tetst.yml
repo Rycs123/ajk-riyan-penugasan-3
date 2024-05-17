@@ -86,5 +86,7 @@ jobs:
             sudo docker exec backend bash -c "php artisan key:generate"
             sudo docker exec backend bash -c "php artisan migrate"
             sudo docker exec backend bash -c "php artisan db:seed"
+            sudo docker exec backend bash -c "php artisan config:cache"
+            sudo docker exec backend bash -c "php artisan view:cache"
             sudo docker run -d --name frontend -h frontend --network laravel -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/frontend
             sudo docker run -d --name nginx -h nginx --network laravel -p 80:80 ${{ secrets.DOCKER_USERNAME }}/nginx
