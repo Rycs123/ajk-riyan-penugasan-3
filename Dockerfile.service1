@@ -27,6 +27,15 @@ RUN cp .env.example .env
 
 RUN php artisan key:generate
 
+# Debugging steps
+RUN php -r "file_exists('.env') ? print('Environment file exists\n') : print('Environment file missing\n');"
+RUN php -r "print_r(getenv());"  # Print all environment variables
+RUN php -r "print_r(include('.env'));"  # Print .env contents
+RUN php artisan config:cache
+
+# Ensure the application can connect to the database
+RUN php -r "try { new PDO(getenv('DB_CONNECTION') . ':host=' . getenv('DB_HOST') . ';dbname=' . getenv('DB_DATABASE'), getenv('DB_USERNAME'), getenv('DB_PASSWORD')); print('Database connection successful\n'); } catch (Exception $e) { print('Database connection failed: ' . $e->getMessage() . '\n'); exit(1); }"
+
 RUN php artisan migrate:reset
 RUN php artisan migrate
 RUN php artisan db:seed
