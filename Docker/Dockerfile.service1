@@ -1,0 +1,54 @@
+FROM php:8.2-fpm
+
+WORKDIR /var/www/fullstack
+
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    git \
+    curl \
+    libzip-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-install gd pdo pdo_mysql exif pcntl bcmath mbstring zip opcache
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+COPY . .
+
+RUN composer install --optimize-autoloader --no-dev
+
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
+
+RUN npm install
+
+# RUN npm run build
+
+RUN cp .env.example .env
+
+RUN php artisan key:generate
+
+RUN php artisan cache:clear
+RUN php artisan route:clear
+RUN php artisan config:clear
+RUN php artisan view:clear
+
+RUN php artisan key:generate
+
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
+RUN php artisan storage:link
+
+RUN mkdir -p /var/www/fullstack/storage/logs
+RUN chmod -R 775 . && chown -R www-data:www-data .
+RUN chmod -R 775 /var/www/fullstack/storage/logs
+
+EXPOSE 8000
+CMD ["php-fpm"]

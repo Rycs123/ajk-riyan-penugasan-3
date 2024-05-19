@@ -1,0 +1,9 @@
+FROM nginx:latest
+
+COPY /nginx/default.conf /etc/nginx/nginx.conf
+
+COPY . /var/www/fullstack
+
+EXPOSE 80/tcp
+
+CMD ["nginx", "-g", "daemon off;"]
