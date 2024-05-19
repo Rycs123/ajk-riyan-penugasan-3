@@ -29,7 +29,7 @@ jobs:
         with:
           context: .
           push: true
-          file: Dockerfile.mysql
+          file: Docker/Dockerfile.mysql
           tags: ${{ secrets.DOCKER_USERNAME }}/mysql:latest
 
       - name: Build and push backend image
@@ -37,7 +37,7 @@ jobs:
         with:
           context: .
           push: true
-          file: Dockerfile.service1
+          file: Docker/Dockerfile.service1
           tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
 
       - name: Build and push frontend image
@@ -45,7 +45,7 @@ jobs:
         with:
           context: .
           push: true
-          file: Dockerfile.service2
+          file: Docker/Dockerfile.service2
           tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
 
       - name: Build and push nginx image
@@ -53,7 +53,7 @@ jobs:
         with:
           context: .
           push: true
-          file: Dockerfile.nginx
+          file: Docker/Dockerfile.nginx
           tags: ${{ secrets.DOCKER_USERNAME }}/nginx:latest
 
   deploy:
